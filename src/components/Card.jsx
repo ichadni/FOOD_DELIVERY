@@ -4,13 +4,13 @@ export default function Card() {
     return (
         <div>
             <div>
-                <div className="card mt-3" style={{ "width": "18rem", "maxHeight": "360px" }}>
-                    <img src="..." className="card-img-top" alt="..." />
-                    <div className="card-body">
+                <div className="card mt-3" style={{ "width": "18rem", overflow:"visible" }}>
+                    <img src="https://images.unsplash.com/photo-1577805947697-89e18249d767?w=300&h=300&fit=crop" className="card-img-top" alt="Orange Juice" />
+                    <div className="card-body" style={{ overflow: "visible" }}>
                         <h5 className="card-title">Card title</h5>
                         <p className="card-text">Some quick example.</p>
                         <div className='container w-100'>
-                            <select className='m-2 h-100  bg-success rounded'>
+                            <select className='m-2 h-100  bg-success rounded' defaultValue="1">
                                 {Array.from(Array(6), (e, i) => {
                                     return (
                                         <option key={i + 1} value={i + 1}>{i + 1}</option>
@@ -18,7 +18,7 @@ export default function Card() {
                                 })}
 
                             </select>
-                            <select className='m-2 h-100  bg-success rounded'>
+                            <select className='m-2 h-100  bg-success rounded' defaultValue="half">
                                 <option value="half">Half</option>
                                 <option value="full">Full</option>
                             </select>
