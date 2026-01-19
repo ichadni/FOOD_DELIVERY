@@ -11,14 +11,19 @@ const mongoDB = async () => {
 
     console.log("Connected to MongoDB Successfully");
 
-    const fetched_data = mongoose.connection.db.collection("Food_items");
-    fetched_data.find({}).toArray( function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(data);
-        }
-    });
+   const fetched_data = await mongoose.connection.db
+  .collection("Food_items")
+  .find({})
+  .toArray();
+  const Food_category = await mongoose.connection.db
+  .collection("Food_category")
+  .find({})
+  .toArray();
+global.Food_category = Food_category;
+global.Food_items = fetched_data;
+console.log("Food items loaded:", global.Food_items.length);
+console.log("Food categories loaded:", global.Food_category.length);
+
     
 
   } catch (err) {

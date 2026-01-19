@@ -1,5 +1,9 @@
 import React from 'react'
 import Login from './screens/Login'
+import Signup from './screens/Signup'
+import Cart from './screens/Cart'
+import MyOrder from './screens/MyOrder'
+
 
 import Home from './screens/Home'
 import {
@@ -9,19 +13,28 @@ import {
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { CartProvider } from './components/ContexReducer';
 
 
 
 const App = () => {
   return (
-    <Router>
+    <CartProvider>
+ <Router>
       <div>
         <Routes>
           <Route exact path='/' element={<Home />} />
           <Route exact path='/login' element={<Login />} />
+          <Route exact path='/createuser' element={<Signup />} />
+          <Route exact path='/myorder' element={<MyOrder />} />
+
+          
+          
         </Routes>
       </div>
     </Router>
+    </CartProvider>
+   
   )
 }
 
