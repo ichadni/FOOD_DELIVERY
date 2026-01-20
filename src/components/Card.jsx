@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useCart, useDispatchCart } from './ContexReducer';
 
+
+
+
 export default function Card({ foodItem, options }) {
-  if (!foodItem) return null; 
+  if (!foodItem) return null;
+  
+  const role = localStorage.getItem('role');
 
   const dispatch = useDispatchCart();
   const data = useCart();
 
-  
+
   const defaultOptions = foodItem.name.toLowerCase().includes("pizza")
-    ? { Small: 300, Medium: 600, Large: 800 } 
+    ? { Small: 300, Medium: 600, Large: 800 }
     : { Half: foodItem.price || 250, Full: (foodItem.price || 250) * 2 }; // non-pizza Half/Full
 
   const priceOptions = options ? Object.keys(options) : Object.keys(defaultOptions);
@@ -20,7 +25,7 @@ export default function Card({ foodItem, options }) {
     qty * (options ? options[size] : defaultOptions[size])
   );
 
-  
+
   useEffect(() => {
     setFinalPrice(qty * (options ? options[size] : defaultOptions[size]));
   }, [qty, size, options]);
@@ -28,19 +33,19 @@ export default function Card({ foodItem, options }) {
   const handleAddToCart = async () => {
     let food = null;
 
-  
-  for (const item of data) {
-    if (item.id === foodItem._id && item.size === size) {
-      food = item;
-      break;
-    }
-  }
 
-  if (food) {
-    
-    dispatch({ type: "UPDATE", id: food.id, price: finalPrice, qty: qty });
-    return;
-  }
+    for (const item of data) {
+      if (item.id === foodItem._id && item.size === size) {
+        food = item;
+        break;
+      }
+    }
+
+    if (food) {
+
+      dispatch({ type: "UPDATE", id: food.id, price: finalPrice, qty: qty });
+      return;
+    }
 
 
     await dispatch({
@@ -69,7 +74,7 @@ export default function Card({ foodItem, options }) {
         <p className="card-text">{foodItem.description}</p>
 
         <div className="container w-100 d-flex align-items-center">
-          
+
           <select
             className="m-2 h-100 bg-success rounded"
             value={qty}
@@ -80,7 +85,7 @@ export default function Card({ foodItem, options }) {
             ))}
           </select>
 
-          
+
           <select
             className="m-2 h-100 bg-success rounded"
             value={size}
@@ -97,9 +102,12 @@ export default function Card({ foodItem, options }) {
 
         <hr />
 
-        <button className="btn btn-success w-100 mt-2" onClick={handleAddToCart}>
-          Add to Cart
-        </button>
+        {role !== 'admin' && (
+          <button className="btn btn-success w-100 mt-2" onClick={handleAddToCart}>
+            Add to Cart
+          </button>
+        )}
+
       </div>
     </div>
   );

@@ -5,7 +5,13 @@ const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     date: { type: Date, default: Date.now },
-    location: { type: String, required: true }
+    location: { type: String, required: true },
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user"
+    }
+
 
 });
 

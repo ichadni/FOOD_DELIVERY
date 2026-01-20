@@ -1,6 +1,6 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import Badge from 'react-bootstrap/Badge';
-import { Link ,useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Modal from '../Modal';
 import Cart from '../screens/Cart';
 import { useCart } from './ContexReducer';
@@ -10,7 +10,7 @@ import { useCart } from './ContexReducer';
 export default function Navbar() {
   const [cartView, setCartView] = useState(false);
   const navigate = useNavigate();
-  let data=useCart();
+  let data = useCart();
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -37,34 +37,42 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2">
             <li className="nav-item">
-              <Link className="nav-link active fs-5 "to="/">Home</Link>
+              <Link className="nav-link active fs-5 " to="/">Home</Link>
             </li>
-            {localStorage.getItem("authToken") ? (
+            {localStorage.getItem("authToken") && localStorage.getItem("role") !== 'admin' && (
               <li className="nav-item">
-                <Link className="nav-link active fs-5 aria-current "to="/myorder">MyOrders</Link>
+                <Link className="nav-link active fs-5" to="/myorder">MyOrders</Link>
               </li>
-            ) : null}
+            )}
 
-            
+
+
           </ul>
-          {(!localStorage.getItem("authToken")) ? 
-         <div>
-              <Link className="btn bg-white text-success mx-1"to="/login">Login</Link>
-              <Link className="btn bg-white text-success mx-1"to="/createuser">SignUp</Link>
-         </div>
-          :
-          <div>
-            <div className='btn bg-white text-success mx-2' onClick={()=>{setCartView(true)}}>
-            My Cart{" "}
-            <Badge pill bg="danger" style={{marginLeft:"3px"}}>{data.length}</Badge>
+          {(!localStorage.getItem("authToken")) ?
+            <div>
+              <Link className="btn bg-white text-success mx-1" to="/login">Login</Link>
+              <Link className="btn bg-white text-success mx-1" to="/createuser">SignUp</Link>
             </div>
-            {cartView ?<Modal onClose={()=>{setCartView(false)}}><Cart/></Modal>:null}
-            <div className='btn bg-white text-danger mx-2' onClick={handleLogout}>
-            Logout
-            </div>
+            :
+            <div>
+              {localStorage.getItem("role") !== 'admin' ? (
+                <div className='btn bg-white text-success mx-2' onClick={() => { setCartView(true) }}>
+                  My Cart{" "}
+                  <Badge pill bg="danger" style={{ marginLeft: "3px" }}>{data.length}</Badge>
+                </div>
+              ) : (
+                <button className='btn bg-warning text-dark mx-2'>
+                  Add Cart
+                </button>
+              )}
+
+              {cartView ? <Modal onClose={() => { setCartView(false) }}><Cart /></Modal> : null}
+              <div className='btn bg-white text-danger mx-2' onClick={handleLogout}>
+                Logout
+              </div>
             </div>}
-              
-            
+
+
         </div>
       </div>
     </nav>

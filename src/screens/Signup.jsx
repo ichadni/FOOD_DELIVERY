@@ -8,11 +8,19 @@ export default function Signup() {
     password: "",
     geolocation: ""
   });
+  const [role, setRole] = useState("");
+
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!role) {
+      alert("Please select User or Admin");
+      return;
+    }
+
+
 
     try {
       const response = await fetch('http://localhost:5000/api/createuser', {
@@ -22,16 +30,23 @@ export default function Signup() {
           name: credentials.name,
           email: credentials.email,
           password: credentials.password,
-          location: credentials.geolocation
+          location: credentials.geolocation,
+          role: role
         }),
       });
 
       const json = await response.json();
 
       if (json.success) {
+
+        localStorage.setItem("authToken", json.authToken);
         localStorage.setItem("userEmail", credentials.email);
-        alert('Account created successfully!');
-        navigate('/');
+        localStorage.setItem("role", json.role);
+
+
+        navigate('/', { replace: true });
+
+
       } else {
         alert('Enter valid credentials.');
       }
@@ -45,63 +60,88 @@ export default function Signup() {
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <div className="card shadow p-4" style={{ maxWidth: "400px", width: "100%", borderRadius: "10px" }}>
         <h3 className="text-center mb-4">Create Account</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Name</label>
-            <input
-              type="text"
-              className="form-control"
-              value={credentials.name}
-              onChange={(e) => setCredentials({ ...credentials, name: e.target.value })}
-              placeholder="Enter your name"
-              required
-            />
-          </div>
+        {!role && (
+          <div className="d-flex gap-2 mb-3">
+            <button
+              type="button"
+              className="btn btn-primary w-100"
+              onClick={() => setRole("user")}
+            >
+              Sign up as User
+            </button>
 
-          <div className="mb-3">
-            <label className="form-label">Email address</label>
-            <input
-              type="email"
-              className="form-control"
-              value={credentials.email}
-              onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-              placeholder="Enter your email"
-              required
-            />
+            <button
+              type="button"
+              className="btn btn-dark w-100"
+              onClick={() => setRole("admin")}
+            >
+              Sign up as Admin
+            </button>
           </div>
+        )}
 
-          <div className="mb-3">
-            <label className="form-label">Password</label>
-            <input
-              type="password"
-              className="form-control"
-              value={credentials.password}
-              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-              placeholder="Enter your password"
-              required
-            />
-          </div>
+        {role && (
+          <form onSubmit={handleSubmit}>
 
-          <div className="mb-4">
-            <label className="form-label">Geolocation</label>
-            <input
-              type="text"
-              className="form-control"
-              value={credentials.geolocation}
-              onChange={(e) => setCredentials({ ...credentials, geolocation: e.target.value })}
-              placeholder="Enter your location"
-            />
-          </div>
+            <div className="mb-3">
+              <label className="form-label">Name</label>
+              <input
+                type="text"
+                className="form-control"
+                value={credentials.name}
+                onChange={(e) => setCredentials({ ...credentials, name: e.target.value })}
+                placeholder="Enter your name"
+                required
+              />
+            </div>
 
-          <button type="submit" className="btn btn-success w-100 mb-2">Sign Up</button>
-          <button
-            type="button"
-            className="btn btn-outline-secondary w-100"
-            onClick={() => navigate('/login')}
-          >
-            Already have an account? Login
-          </button>
-        </form>
+            <div className="mb-3">
+              <label className="form-label">Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                value={credentials.email}
+                onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                value={credentials.password}
+                onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="form-label">Geolocation</label>
+              <input
+                type="text"
+                className="form-control"
+                value={credentials.geolocation}
+                onChange={(e) => setCredentials({ ...credentials, geolocation: e.target.value })}
+                placeholder="Enter your location"
+              />
+            </div>
+
+            <button type="submit" className="btn btn-success w-100 mb-2">Sign Up</button>
+            <button
+              type="button"
+              className="btn btn-outline-secondary w-100"
+              onClick={() => navigate('/login')}
+            >
+              Already have an account? Login
+            </button>
+          </form>
+        )}
+
+
       </div>
     </div>
   );
