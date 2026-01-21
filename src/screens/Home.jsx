@@ -15,7 +15,7 @@ export default function Home() {
   const loadData = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/displaydata", {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
 

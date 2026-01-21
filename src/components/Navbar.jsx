@@ -61,8 +61,8 @@ export default function Navbar() {
                   <Badge pill bg="danger" style={{ marginLeft: "3px" }}>{data.length}</Badge>
                 </div>
               ) : (
-                <button className='btn bg-warning text-dark mx-2'>
-                  Add Cart
+                <button className='btn bg-warning text-dark mx-2' onClick={() => window.location.href = "/add-food"}>
+                  Add Food-Items
                 </button>
               )}
 

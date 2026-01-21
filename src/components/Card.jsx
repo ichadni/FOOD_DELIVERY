@@ -1,113 +1,121 @@
 import React, { useState, useEffect } from 'react';
 import { useCart, useDispatchCart } from './ContexReducer';
 
+const colors = [
+  "#FFD700", // gold
+  "#FF7F50", // coral
+  "#87CEFA", // light blue
+  "#FFB6C1", // light pink
+  "#90EE90", // light green
+  "#FFA07A", // light salmon
+];
 
-
-
-export default function Card({ foodItem, options }) {
+export default function Card({ foodItem }) {
   if (!foodItem) return null;
-  
+
   const role = localStorage.getItem('role');
-
   const dispatch = useDispatchCart();
-  const data = useCart();
+  const cartData = useCart();
 
-
-  const defaultOptions = foodItem.name.toLowerCase().includes("pizza")
-    ? { Small: 300, Medium: 600, Large: 800 }
-    : { Half: foodItem.price || 250, Full: (foodItem.price || 250) * 2 }; // non-pizza Half/Full
-
-  const priceOptions = options ? Object.keys(options) : Object.keys(defaultOptions);
+  const basePrice = Number(foodItem.price);
+  const sizeOptions = { Half: basePrice, Full: basePrice * 2 };
 
   const [qty, setQty] = useState(1);
-  const [size, setSize] = useState(priceOptions[0]);
-  const [finalPrice, setFinalPrice] = useState(
-    qty * (options ? options[size] : defaultOptions[size])
-  );
-
+  const [size, setSize] = useState('Half');
+  const [finalPrice, setFinalPrice] = useState(basePrice);
 
   useEffect(() => {
-    setFinalPrice(qty * (options ? options[size] : defaultOptions[size]));
-  }, [qty, size, options]);
+    setFinalPrice(qty * sizeOptions[size]);
+  }, [qty, size]);
 
-  const handleAddToCart = async () => {
-    let food = null;
+  const handleAddToCart = () => {
+    const existingItem = cartData.find(
+      item => item.id === foodItem._id && item.size === size
+    );
 
-
-    for (const item of data) {
-      if (item.id === foodItem._id && item.size === size) {
-        food = item;
-        break;
-      }
+    if (existingItem) {
+      dispatch({
+        type: "UPDATE",
+        id: foodItem._id,
+        size,
+        qty,
+        price: finalPrice
+      });
+    } else {
+      dispatch({
+        type: "ADD",
+        id: foodItem._id,
+        name: foodItem.name,
+        price: finalPrice,
+        qty,
+        size,
+        img: foodItem.img,
+      });
     }
-
-    if (food) {
-
-      dispatch({ type: "UPDATE", id: food.id, price: finalPrice, qty: qty });
-      return;
-    }
-
-
-    await dispatch({
-      type: "ADD",
-      id: foodItem._id,
-      name: foodItem.name,
-      price: options ? options[size] : defaultOptions[size],
-      qty: qty,
-      size: size,
-      img: foodItem.img,
-    });
-    console.log(data);
   };
 
+  
+  const cardColor = colors[Math.floor(Math.random() * colors.length)];
+
   return (
-    <div className="card mt-3 mb-4" style={{ width: "100%", overflow: "visible" }}>
+    <div
+      className="card h-100 text-dark shadow-lg"
+      style={{
+        borderRadius: "20px",
+        background: cardColor,
+        transition: "transform 0.3s, box-shadow 0.3s",
+        overflow: "hidden",
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = "translateY(-5px)";
+        e.currentTarget.style.boxShadow = "0 10px 25px rgba(0,0,0,0.2)";
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
+      }}
+    >
       <img
         src={foodItem.img}
-        className="card-img-top"
         alt={foodItem.name}
-        style={{ height: "160px", objectFit: "cover" }}
+        className="card-img-top"
+        style={{
+          height: "180px",
+          objectFit: "cover",
+          transition: "transform 0.3s",
+        }}
       />
 
-      <div className="card-body">
-        <h5 className="card-title">{foodItem.name}</h5>
-        <p className="card-text">{foodItem.description}</p>
+      <div className="card-body d-flex flex-column">
+        <h5 className="card-title text-truncate">{foodItem.name}</h5>
+        <p className="card-text flex-grow-1">{foodItem.description || "Delicious food!"}</p>
 
-        <div className="container w-100 d-flex align-items-center">
-
+        <div className="d-flex justify-content-between align-items-center mb-2">
           <select
-            className="m-2 h-100 bg-success rounded"
+            className="form-select form-select-sm me-2"
             value={qty}
-            onChange={(e) => setQty(Number(e.target.value))}
+            onChange={e => setQty(Number(e.target.value))}
           >
-            {Array.from({ length: 6 }, (_, i) => (
-              <option key={i + 1} value={i + 1}>{i + 1}</option>
-            ))}
+            {[1,2,3,4,5,6].map(n => <option key={n} value={n}>{n}</option>)}
           </select>
-
 
           <select
-            className="m-2 h-100 bg-success rounded"
+            className="form-select form-select-sm"
             value={size}
-            onChange={(e) => setSize(e.target.value)}
+            onChange={e => setSize(e.target.value)}
           >
-            {priceOptions.map((opt) => (
-              <option key={opt} value={opt}>{opt}</option>
-            ))}
+            {Object.keys(sizeOptions).map(opt => <option key={opt} value={opt}>{opt}</option>)}
           </select>
-
-          {/* Display final price */}
-          <div className="d-inline h-100 fs-5 ms-2">₹{finalPrice}</div>
         </div>
 
-        <hr />
-
-        {role !== 'admin' && (
-          <button className="btn btn-success w-100 mt-2" onClick={handleAddToCart}>
-            Add to Cart
-          </button>
-        )}
-
+        <div className="d-flex justify-content-between align-items-center">
+          <span className="fw-bold fs-5">₹ {finalPrice}</span>
+          {role !== 'admin' && (
+            <button className="btn btn-dark btn-sm" onClick={handleAddToCart}>
+              Add
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

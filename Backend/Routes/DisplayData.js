@@ -1,16 +1,22 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const FoodItem = require("../models/FoodItem");
+const FoodCategory = require("../models/FoodCategory");
 
-router.post('/displaydata', (req, res) => {
+// Fetch all food items and categories
+router.get("/displaydata", async (req, res) => {
   try {
-    console.log(global.Food_items,global.Food_category);
-    res.json({Food_items: global.Food_items, Food_category: global.Food_category});
-    return;
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Internal Server Error");
-    }
-    
+    const foodItems = await FoodItem.find({});
+    const foodCategories = await FoodCategory.find({});
+
+    res.json({
+      Food_items: foodItems,
+      Food_category: foodCategories
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
 });
 
 module.exports = router;

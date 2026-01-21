@@ -3,6 +3,7 @@ import Login from './screens/Login'
 import Signup from './screens/Signup'
 import Cart from './screens/Cart'
 import MyOrder from './screens/MyOrder'
+import AddFood from './screens/AddFood'
 
 
 import Home from './screens/Home'
@@ -27,6 +28,8 @@ const App = () => {
           <Route exact path='/login' element={<Login />} />
           <Route exact path='/createuser' element={<Signup />} />
           <Route exact path='/myorder' element={<MyOrder />} />
+          <Route exact path='/add-food' element={<AddFood />} />
+          
 
           
           
