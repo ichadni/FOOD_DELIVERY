@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Card from '../components/Card';
-
 
 export default function Home() {
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState([]);
   const [foodItems, setFoodItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const role = localStorage.getItem('role');
-
 
   const loadData = async () => {
     try {
@@ -42,96 +39,77 @@ export default function Home() {
   return (
     <div>
       <Navbar />
-      <div>
 
+      {/* Small Carousel with Light Images */}
+      <div className="position-relative mb-3">
         <div
           id="carouselExampleControls"
           className="carousel slide"
           data-bs-ride="carousel"
-          style={{ objectFit: "contain!important" }}
+          style={{ height: "35vh" }}
         >
-          <div className="carousel-inner" id='carousel'>
-            <div className="carousel-caption" style={{ zIndex: "10" }}>
-              <div className="d-flex justify-content-center">
-                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={search}
-                  onChange={(e) => setSearch(e.target.value)} />
-
+          <div className="carousel-inner h-100">
+            {[
+              { img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&h=400&fit=crop", alt: "Burger" },
+              { img: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=600&h=400&fit=crop", alt: "Pizza" },
+              { img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&h=400&fit=crop", alt: "Chicken" },
+              { img: "https://images.unsplash.com/photo-1628294896516-344152572ee8?w=600&h=400&fit=crop", alt: "Momos" },
+            ].map((slide, idx) => (
+              <div key={idx} className={`carousel-item ${idx === 0 ? 'active' : ''} h-100`}>
+                <img
+                  src={slide.img}
+                  className="d-block w-100 h-100"
+                  style={{ objectFit: "cover", filter: "brightness(80%)" }}
+                  alt={slide.alt}
+                />
               </div>
-            </div>
-
-            <div className="carousel-item active">
-              <img
-                src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=900&h=700&fit=crop"
-                className="d-block w-100"
-                style={{ filter: "brightness(30%)" }}
-                alt="Burger"
-              />
-            </div>
-
-            <div className="carousel-item">
-              <img
-                src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=900&h=700&fit=crop"
-                className="d-block w-100"
-                style={{ filter: "brightness(30%)" }}
-                alt="Pizza"
-              />
-            </div>
-
-            <div className="carousel-item">
-              <img
-                src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=900&h=700&fit=crop"
-                className="d-block w-100"
-                style={{ filter: "brightness(30%)" }}
-                alt="Chicken"
-              />
-            </div>
-
-            <div className="carousel-item">
-              <img
-                src="https://images.unsplash.com/photo-1628294896516-344152572ee8?w=900&h=700&fit=crop"
-                className="d-block w-100"
-                style={{ filter: "brightness(30%)" }}
-                alt="Momos"
-              />
-            </div>
-
+            ))}
           </div>
 
-          <button
-            className="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExampleControls"
-            data-bs-slide="prev"
-          >
+          {/* Carousel Controls */}
+          <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
             <span className="carousel-control-prev-icon" aria-hidden="true"></span>
             <span className="visually-hidden">Previous</span>
           </button>
-
-          <button
-            className="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExampleControls"
-            data-bs-slide="next"
-          >
+          <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
             <span className="carousel-control-next-icon" aria-hidden="true"></span>
             <span className="visually-hidden">Next</span>
           </button>
-        </div>
 
+          {/* Compact Search Bar */}
+          <div className="carousel-caption d-flex justify-content-center" style={{ bottom: "15%" }}>
+            <input
+              type="search"
+              className="form-control form-control-sm w-50 shadow-sm"
+              placeholder="Search food..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                borderRadius: "25px",
+                backgroundColor: "rgba(255,255,255,0.9)",
+                border: "1px solid #ccc",
+                padding: "0.25rem 0.75rem",
+                fontSize: "0.9rem",
+              }}
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="container my-5">
-        
+      {/* Categories & Food Items */}
+      <div className="container my-3">
         {categories.length > 0 ? (
           categories.map((category) => {
             const catName = category.CategoryName;
-            const itemsInCategory = foodItems.filter(item => item.CategoryName === catName && item.name.toLowerCase().includes(search.toLowerCase()));
+            const itemsInCategory = foodItems.filter(item =>
+              item.CategoryName === catName && item.name.toLowerCase().includes(search.toLowerCase())
+            );
 
             return (
-              <div key={category._id} className="mb-5">
-                <h3 className="mb-3">{catName}</h3>
-                <hr />
-                <div className="row g-4">
+              <div key={category._id} className="mb-4"> {/* Less margin mb-4 instead of mb-5 */}
+                <h4 className="mb-2 text-success">{catName}</h4> {/* Smaller margin mb-2 */}
+                <hr className="mb-3" /> {/* Slightly less spacing */}
+                <div className="row g-3"> {/* Smaller gap between cards */}
                   {itemsInCategory.length > 0 ? (
                     itemsInCategory.map(item => (
                       <div key={item._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -139,14 +117,14 @@ export default function Home() {
                       </div>
                     ))
                   ) : (
-                    <p className="text-center">No items available in this category.</p>
+                    <p className="text-center text-muted small">No items available in this category.</p>
                   )}
                 </div>
               </div>
             );
           })
         ) : (
-          <p className="text-center">No categories available.</p>
+          <p className="text-center text-muted">No categories available.</p>
         )}
       </div>
 
