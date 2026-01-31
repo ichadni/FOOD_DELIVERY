@@ -1,32 +1,38 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 
+/* Status → Bootstrap color */
+const getStatusColor = (status) => {
+  switch (status) {
+    case "Delivered":
+      return "success";
+    case "Confirmed":
+      return "info";
+    case "Cancelled":
+      return "danger";
+    default:
+      return "warning"; // Pending
+  }
+};
+
 export default function MyOrder() {
+  const navigate = useNavigate();
   const [orderData, setOrderData] = useState([]);
 
   const fetchMyOrder = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/myorder", {
+      const res = await fetch("http://localhost:5000/api/myorder", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: localStorage.getItem('userEmail') })
+        body: JSON.stringify({
+          email: localStorage.getItem('userEmail')
+        })
       });
 
-      const response = await res.json();
-
-      // Fix old nested array orders
-      const formattedOrders = response.orderData?.map(order => {
-        if (Array.isArray(order)) {
-          return { order_date: new Date().toISOString(), order_data: order };
-        }
-        return {
-          order_date: order.order_date,
-          order_data: order.order_data || order.items || []
-        };
-      }) || [];
-
-      setOrderData(formattedOrders);
+      const data = await res.json();
+      setOrderData(Array.isArray(data.orderData) ? data.orderData : []);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -34,44 +40,96 @@ export default function MyOrder() {
 
   useEffect(() => {
     fetchMyOrder();
+    const interval = setInterval(fetchMyOrder, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div>
       <Navbar />
 
-      <div className='container'>
-        {orderData.length > 0 ? (
+      <div className="container my-4">
+        {orderData.length === 0 ? (
+          <div className="text-center mt-5">
+            <p className="fs-5 mb-3">You have no orders yet.</p>
+            <button
+              className="btn btn-outline-success"
+              onClick={() => navigate("/")}
+            >
+              Go to Home
+            </button>
+          </div>
+        ) : (
           orderData
-            .slice(0)
+            .slice()
             .reverse()
             .map((order, index) => {
-              const items = order.order_data;
-              const orderDate = order.order_date;
+              const items = Array.isArray(order.items) ? order.items : [];
+
+              const orderTotal = items.reduce(
+                (sum, item) => sum + Number(item.price || 0),
+                0
+              );
 
               return (
-                <div key={index} className='mb-5'>
-                  <div className='m-auto mt-5'>
-                    <h4>Order Date: {new Date(orderDate).toLocaleString()}</h4>
-                    <hr />
+                <div
+                  key={index}
+                  className="mb-5 p-3 border rounded shadow-sm bg-light"
+                >
+                  {/* Order Header */}
+                  <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h5 className="mb-0">
+                      Order Date:{" "}
+                      {new Date(order.order_date).toLocaleString()}
+                    </h5>
+
+                    <div className="d-flex align-items-center gap-3">
+                      <span
+                        className={`badge bg-${getStatusColor(
+                          order.status || "Pending"
+                        )}`}
+                      >
+                        {order.status || "Pending"}
+                      </span>
+
+                      <span className="fw-bold text-success">
+                        Total: ₹{orderTotal}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className='row'>
-                    {items.map(item => (
-                      <div key={item.id} className='col-12 col-md-6 col-lg-3'>
-                        <div className="card mt-3" style={{ width: "16rem", maxHeight: "360px" }}>
+                  <hr />
+
+                  {/* Order Items */}
+                  <div className="row g-3">
+                    {items.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="col-12 col-sm-6 col-md-4 col-lg-3"
+                      >
+                        <div className="card h-100 shadow-sm">
                           <img
-                            src={item.img || '/placeholder.png'}
+                            src={item.img || "/placeholder.png"}
                             className="card-img-top"
                             alt={item.name}
-                            style={{ height: "120px", objectFit: "fill" }}
+                            style={{ height: "140px", objectFit: "cover" }}
                           />
-                          <div className="card-body">
-                            <h5 className="card-title">{item.name}</h5>
-                            <div className='d-flex justify-content-between'>
-                              <span>{item.qty}</span>
-                              <span>{item.size}</span>
-                              <span>₹{item.price}/-</span>
+                          <div className="card-body d-flex flex-column">
+                            <h6 className="card-title">{item.name}</h6>
+
+                            <div className="mt-auto small text-muted">
+                              <div className="d-flex justify-content-between">
+                                <span>Qty:</span>
+                                <span>{item.qty}</span>
+                              </div>
+                              <div className="d-flex justify-content-between">
+                                <span>Size:</span>
+                                <span>{item.size}</span>
+                              </div>
+                              <div className="d-flex justify-content-between fw-bold">
+                                <span>Price:</span>
+                                <span>₹{item.price}</span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -81,8 +139,6 @@ export default function MyOrder() {
                 </div>
               );
             })
-        ) : (
-          <p className='mt-5 text-center'>You have no orders yet.</p>
         )}
       </div>
 

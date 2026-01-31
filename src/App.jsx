@@ -4,6 +4,10 @@ import Signup from './screens/Signup'
 import Cart from './screens/Cart'
 import MyOrder from './screens/MyOrder'
 import AddFood from './screens/AddFood'
+import Checkout from './screens/Checkout'
+import ConfirmOrder from './screens/ConfirmOrder'
+import Admin from './screens/Admin'
+import ApproveOrder from './screens/ApproveOrder'
 
 
 import Home from './screens/Home'
@@ -29,6 +33,12 @@ const App = () => {
           <Route exact path='/createuser' element={<Signup />} />
           <Route exact path='/myorder' element={<MyOrder />} />
           <Route exact path='/add-food' element={<AddFood />} />
+          <Route exact path='/cart' element={<Cart />} />
+          <Route exact path='/checkout' element={<Checkout />} />
+          <Route exact path='/confirm-order' element={<ConfirmOrder />} />
+          <Route exact path='/admin' element={<Admin />} />
+          <Route exact path='/approve-order' element={<ApproveOrder />} />
+          
           
 
           

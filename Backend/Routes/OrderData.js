@@ -5,12 +5,14 @@ const Order = require('../models/Orders');
 // Save order
 router.post('/orderdata', async (req, res) => {
   try {
-    const { email, order_data, order_date } = req.body;
+    const { email, order_data, order_date,deliveryDetails } = req.body;
 
     // Prepare order object
     const orderEntry = {
       order_date: order_date, 
-      items: order_data.map(item => ({ ...item, qty: Number(item.qty) }))
+      items: order_data.map(item => ({ ...item, qty: Number(item.qty),price: Number(item.price), size: item.size && item.size.trim() ? item.size : "Half" })),
+       ...(deliveryDetails ? { deliveryDetails } : {}),
+       status: "pending"
     };
 
     const existingOrder = await Order.findOne({ email });
@@ -44,7 +46,9 @@ router.post('/myorder', async (req, res) => {
 
     const formattedOrders = myData.order_data.map(order => ({
       order_date: order.order_date,
-      order_data: order.items
+      items:order.items,
+      deliveryDetails: order.deliveryDetails || null,
+      status: order.status || "pending"
     }));
 
     res.json({ orderData: formattedOrders });
