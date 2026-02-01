@@ -33,10 +33,13 @@ export default function AddFood() {
         <div className="container my-5">
             <div className="row justify-content-center">
                 <div className="col-12 col-md-10 col-lg-8">
-                    <div className="card shadow-lg border-0 rounded-4">
+                    <div className="card shadow-lg border-0 rounded-4" 
+                         style={{ overflow: "hidden", borderRadius: "20px" }}>
+                        
                         {/* Header */}
-                        <div className="card-header text-center text-white p-4 rounded-top-4" style={{ background: "linear-gradient(90deg, #FF6B6B, #FFD93D)" }}>
-                            <h3 className="mb-0">Add New Food Item</h3>
+                        <div className="card-header text-center text-white p-4" 
+                             style={{ background: "linear-gradient(90deg, #6BCB77, #FFD93D)", fontWeight: "600", fontSize: "1.5rem" }}>
+                            🍔 Add New Food Item 🍟
                         </div>
 
                         {/* Body */}
@@ -49,7 +52,7 @@ export default function AddFood() {
                                         <label className="form-label fw-bold">Food Name</label>
                                         <input
                                             type="text"
-                                            className="form-control border-2 border-success"
+                                            className="form-control border-2 border-success rounded-3 shadow-sm"
                                             placeholder="e.g. Chicken Burger"
                                             required
                                             onChange={e => setFood({ ...food, name: e.target.value })}
@@ -61,7 +64,7 @@ export default function AddFood() {
                                         <label className="form-label fw-bold">Category</label>
                                         <input
                                             type="text"
-                                            className="form-control border-2 border-primary"
+                                            className="form-control border-2 border-primary rounded-3 shadow-sm"
                                             placeholder="e.g. Fast Food"
                                             required
                                             onChange={e => setFood({ ...food, CategoryName: e.target.value })}
@@ -73,7 +76,7 @@ export default function AddFood() {
                                         <label className="form-label fw-bold">Price</label>
                                         <input
                                             type="number"
-                                            className="form-control border-2 border-warning"
+                                            className="form-control border-2 border-warning rounded-3 shadow-sm"
                                             placeholder="₹"
                                             required
                                             onChange={e => setFood({ ...food, price: e.target.value })}
@@ -84,7 +87,7 @@ export default function AddFood() {
                                         <label className="form-label fw-bold">Image URL</label>
                                         <input
                                             type="url"
-                                            className="form-control border-2 border-info"
+                                            className="form-control border-2 border-info rounded-3 shadow-sm"
                                             placeholder="https://..."
                                             required
                                             onChange={e => setFood({ ...food, img: e.target.value })}
@@ -95,7 +98,7 @@ export default function AddFood() {
                                     <div className="col-12">
                                         <label className="form-label fw-bold">Description</label>
                                         <textarea
-                                            className="form-control border-2 border-secondary"
+                                            className="form-control border-2 border-secondary rounded-3 shadow-sm"
                                             rows="3"
                                             placeholder="Short description about the food"
                                             onChange={e => setFood({ ...food, description: e.target.value })}
@@ -104,17 +107,31 @@ export default function AddFood() {
 
                                     {/* Submit button */}
                                     <div className="col-12 mt-3">
-                                        <button className="btn btn-gradient w-100 py-2 fw-bold" style={{ background: "linear-gradient(90deg, #6BCB77, #4D96FF)", color: "white", fontSize: "1.1rem" }}>
-                                            Save Food Item
+                                        <button 
+                                            type="submit"
+                                            className="btn w-100 py-2 fw-bold text-white"
+                                            style={{
+                                                background: "linear-gradient(90deg, #6BCB77, #FFD93D)",
+                                                fontSize: "1.1rem",
+                                                borderRadius: "10px",
+                                                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                                                transition: "all 0.3s",
+                                            }}
+                                            onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+                                            onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+                                        >
+                                            💾 Save Food Item
                                         </button>
                                     </div>
+
                                     <div className="col-12 mt-2">
                                         <button
                                             type="button"
                                             className="btn btn-outline-secondary w-100 py-2 fw-bold"
+                                            style={{ borderRadius: "10px" }}
                                             onClick={() => navigate("/")}
                                         >
-                                            Back to Home
+                                            🔙 Back to Home
                                         </button>
                                     </div>
 

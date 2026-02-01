@@ -23,9 +23,8 @@ export default function Checkout() {
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <div
         className="card bg-dark text-light shadow-lg rounded-4 p-4 w-100 position-relative"
-        style={{ maxWidth: "420px" }}
+        style={{ maxWidth: "420px", border: "2px solid #28a745" }}
       >
-
         {/* Cross Button */}
         <button
           type="button"
@@ -34,17 +33,20 @@ export default function Checkout() {
           onClick={() => navigate(-1)}
         ></button>
 
-        <h3 className="text-success text-center mb-4">
-          Delivery Details
+        <h3
+          className="text-success text-center mb-4"
+          style={{ fontFamily: "'Comic Sans MS', cursive" }}
+        >
+          🚚 Delivery Details
         </h3>
 
         {/* Address */}
         <div className="mb-3">
-          <label className="form-label text-muted">Address</label>
+          <label className="form-label text-warning">Address</label>
           <input
             type="text"
             name="address"
-            className="form-control bg-secondary text-light border-0"
+            className="form-control bg-secondary text-light border-0 shadow-sm"
             placeholder="Enter full address"
             onChange={handleChange}
           />
@@ -52,11 +54,11 @@ export default function Checkout() {
 
         {/* Phone */}
         <div className="mb-3">
-          <label className="form-label text-muted">Phone Number</label>
+          <label className="form-label text-warning">Phone Number</label>
           <input
             type="tel"
             name="phone"
-            className="form-control bg-secondary text-light border-0"
+            className="form-control bg-secondary text-light border-0 shadow-sm"
             placeholder="01XXXXXXXXX"
             onChange={handleChange}
           />
@@ -64,11 +66,11 @@ export default function Checkout() {
 
         {/* Location */}
         <div className="mb-4">
-          <label className="form-label text-muted">Location</label>
+          <label className="form-label text-warning">Location</label>
           <input
             type="text"
             name="location"
-            className="form-control bg-secondary text-light border-0"
+            className="form-control bg-secondary text-light border-0 shadow-sm"
             placeholder="City / Area"
             onChange={handleChange}
           />
@@ -76,12 +78,14 @@ export default function Checkout() {
 
         <button
           className="btn btn-success w-100 fw-semibold py-2"
+          style={{ borderRadius: "25px", fontSize: "1rem", transition: "0.2s" }}
+          onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           onClick={handleNext}
           disabled={!details.address || !details.phone || !details.location}
         >
-          Continue to Confirm
+          ✅ Continue to Confirm
         </button>
-
       </div>
     </div>
   );

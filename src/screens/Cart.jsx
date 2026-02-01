@@ -2,13 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart, useDispatchCart } from "../components/ContexReducer";
 
-export default function Cart() {
+export default function Cart({ onClose }) {
   const cartItems = useCart();
   const dispatch = useDispatchCart();
   const navigate = useNavigate();
 
   const totalPrice = cartItems.reduce(
-    (total, item) => total + Number(item.price) ,
+    (total, item) => total + Number(item.price),
     0
   );
 
@@ -18,74 +18,115 @@ export default function Cart() {
       alert("Please log in first.");
       return;
     }
-
-    // ✅ Move to checkout page
     navigate("/checkout");
+    onClose && onClose();
+  };
+
+  const handleClose = () => {
+    onClose ? onClose() : navigate(-1);
   };
 
   if (cartItems.length === 0) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-75">
-        <h3 className="text-light">Your cart is empty 🛒</h3>
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "70vh" }}>
+        <h3 className="text-warning fw-bold">Your cart is empty 🛒</h3>
       </div>
     );
   }
 
   return (
-    <div className="container my-5">
-      <div className="card shadow-lg bg-dark text-light rounded-4">
-        <div className="card-body">
+    <div style={{ paddingTop: "50px" }}>
+    <div className="container my-4">
+      <div
+        className="card shadow-lg border-0 rounded-4 position-relative"
+        style={{
+          background: "linear-gradient(145deg, #0f5132, #198754)",
+          color: "#fff",
+        }}
+      >
+        {/* Close Button */}
+        <button
+          className="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+          onClick={handleClose}
+        />
 
-          <h3 className="mb-4 text-success text-center">Your Cart</h3>
+        {/* Header */}
+        <div className="text-center py-3 border-bottom border-warning">
+          <h3
+            className="fw-bold text-warning"
+            style={{ fontFamily: "'Comic Sans MS', cursive" }}
+          >
+            🛒 Your Cart
+          </h3>
+        </div>
 
-          <div className="table-responsive">
-            <table className="table table-dark table-hover align-middle">
-              <thead className="table-success text-dark">
-                <tr>
-                  <th>#</th>
-                  <th>Food</th>
-                  <th>Qty</th>
-                  <th>Size</th>
-                  <th>Price</th>
-                  <th></th>
+        {/* Table */}
+        <div className="table-responsive p-3">
+          <table className="table table-borderless align-middle text-center text-light">
+            <thead className="text-dark" style={{ backgroundColor: "#ffc107" }}>
+              <tr>
+                <th>#</th>
+                <th>Food</th>
+                <th>Qty</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {cartItems.map((item, index) => (
+                <tr key={index} className="border-bottom border-success">
+                  <td>{index + 1}</td>
+                  <td className="fw-semibold">{item.name}</td>
+                  <td>
+                    <span className="badge bg-warning text-dark">
+                      {item.qty}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="badge bg-light text-success">
+                      {item.size}
+                    </span>
+                  </td>
+                  <td className="fw-bold text-warning">
+                    ₹{Number(item.price)}
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-sm btn-outline-light"
+                      onClick={() => dispatch({ type: "REMOVE", index })}
+                    >
+                      ✖
+                    </button>
+                  </td>
                 </tr>
-              </thead>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-              <tbody>
-                {cartItems.map((item, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.qty}</td>
-                    <td>{item.size}</td>
-                    <td>₹{(Number(item.price))}</td>
-                    <td>
-                      <button
-                        className="btn btn-outline-danger btn-sm"
-                        onClick={() => dispatch({ type: "REMOVE", index })}
-                      >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* Footer */}
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 gap-3">
+          <h4 className="text-warning fw-bold">
+            Total: ₹{totalPrice}
+          </h4>
 
-          <div className="d-flex justify-content-between align-items-center mt-4">
-            <h4 className="text-success">Total: ₹{totalPrice}</h4>
-
-            <button
-              className="btn btn-success px-4 py-2 fw-semibold"
-              onClick={handleCheckout}
-            >
-              Proceed to Checkout
-            </button>
-          </div>
-
+          <button
+            className="btn btn-warning text-dark fw-semibold px-4 py-2 shadow"
+            style={{
+              borderRadius: "30px",
+              transition: "0.2s",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onClick={handleCheckout}
+          >
+            Proceed to Checkout →
+          </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }
