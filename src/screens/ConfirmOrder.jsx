@@ -14,7 +14,7 @@ export default function ConfirmOrder() {
     const userEmail = localStorage.getItem("userEmail");
 
     try {
-      const response = await fetch("http://localhost:5000/api/orderdata", {
+      const response = await fetch("https://food-delivery-83wk.onrender.com/api/orderdata", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
