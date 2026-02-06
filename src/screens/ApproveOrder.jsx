@@ -7,7 +7,7 @@ export default function ApproveOrder({ email, order, onApprove }) {
 
   const handleApprove = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/approve-order", {
+      const res = await fetch("https://food-delivery-83wk.onrender.com/api/approve-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
