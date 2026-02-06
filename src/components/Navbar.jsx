@@ -18,7 +18,7 @@ export default function Navbar() {
   const fetchPendingCount = async () => {
     if (role === "admin") {
       try {
-        const res = await fetch("http://localhost:5000/api/pending-count");
+        const res = await fetch("https://food-delivery-83wk.onrender.com/api/pending-count");
         const data = await res.json();
         setPendingCount(data.count);
       } catch (err) {
