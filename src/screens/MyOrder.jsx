@@ -23,7 +23,7 @@ export default function MyOrder() {
 
   const fetchMyOrder = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/myorder", {
+      const res = await fetch("https://food-delivery-83wk.onrender.com/api/myorder", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
