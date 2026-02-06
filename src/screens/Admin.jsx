@@ -8,7 +8,7 @@ export default function Admin() {
 
   const fetchPendingOrders = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/pending-orders");
+      const res = await fetch("https://food-delivery-83wk.onrender.com/api/pending-orders");
       const data = await res.json();
       setPendingOrders(data);
     } catch (err) {
