@@ -15,7 +15,7 @@ export default function AddFood() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const res = await fetch("http://localhost:5000/api/addFood", {
+        const res = await fetch("https://food-delivery-83wk.onrender.com/api/addFood", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(food)
