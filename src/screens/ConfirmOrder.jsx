@@ -86,7 +86,7 @@ export default function ConfirmOrder() {
             {cartItems.map((item, index) => (
               <div key={index} className="d-flex justify-content-between mb-2">
                 <span>{item.name} × {item.qty}</span>
-                <span>₹{item.price}</span>
+                <span>৳{item.price}</span>
               </div>
             ))}
 
@@ -94,7 +94,7 @@ export default function ConfirmOrder() {
 
             <div className="d-flex justify-content-between fw-bold">
               <span>Total</span>
-              <span className="text-success">₹{totalPrice}</span>
+              <span className="text-success">৳{totalPrice}</span>
             </div>
           </div>
         </div>

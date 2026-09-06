@@ -77,7 +77,7 @@ export default function AddFood() {
                                         <input
                                             type="number"
                                             className="form-control border-2 border-warning rounded-3 shadow-sm"
-                                            placeholder="₹"
+                                            placeholder="৳"
                                             required
                                             onChange={e => setFood({ ...food, price: e.target.value })}
                                         />

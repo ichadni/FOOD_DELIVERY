@@ -93,7 +93,7 @@ export default function MyOrder() {
                       </span>
 
                       <span className="fw-bold text-success">
-                        Total: ₹{orderTotal}
+                        Total: ৳{orderTotal}
                       </span>
                     </div>
                   </div>
@@ -128,7 +128,7 @@ export default function MyOrder() {
                               </div>
                               <div className="d-flex justify-content-between fw-bold">
                                 <span>Price:</span>
-                                <span>₹{item.price}</span>
+                                <span>৳{item.price}</span>
                               </div>
                             </div>
                           </div>

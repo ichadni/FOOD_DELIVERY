@@ -61,7 +61,7 @@ export default function ApproveOrder({ email, order, onApprove }) {
         {Array.isArray(order.items) && order.items.map((item, idx) => (
           <div key={idx} className="d-flex justify-content-between border-bottom pb-1 mb-1">
             <span>🍴 {item.name} × {item.qty} ({item.size})</span>
-            <span className="fw-bold text-success">₹{item.price}</span>
+            <span className="fw-bold text-success">৳{item.price}</span>
           </div>
         ))}
       </div>

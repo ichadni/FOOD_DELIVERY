@@ -90,7 +90,7 @@ export default function Cart({ onClose }) {
                     </span>
                   </td>
                   <td className="fw-bold text-warning">
-                    ₹{Number(item.price)}
+                    ৳{Number(item.price)}
                   </td>
                   <td>
                     <button
@@ -109,7 +109,7 @@ export default function Cart({ onClose }) {
         {/* Footer */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 gap-3">
           <h4 className="text-warning fw-bold">
-            Total: ₹{totalPrice}
+            Total: ৳{totalPrice}
           </h4>
 
           <button

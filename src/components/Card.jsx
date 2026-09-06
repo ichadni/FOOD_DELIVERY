@@ -109,7 +109,7 @@ export default function Card({ foodItem }) {
         </div>
 
         <div className="d-flex justify-content-between align-items-center">
-          <span className="fw-bold fs-5">₹ {finalPrice}</span>
+          <span className="fw-bold fs-5">৳ {finalPrice}</span>
           {role !== 'admin' && (
             <button className="btn btn-dark btn-sm" onClick={handleAddToCart}>
               Add
