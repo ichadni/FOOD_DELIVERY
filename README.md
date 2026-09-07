@@ -16,7 +16,6 @@
   <img src="https://img.shields.io/badge/Vite-Build%20Tool-purple?style=for-the-badge&logo=vite" alt="Vite">
 </p>
 
----
 
 ## 📌 Overview
 
@@ -28,7 +27,6 @@ The application also includes an **Admin Panel** for adding food items and manag
 
 The project uses a **React + Vite frontend** and a separate **Node.js + Express backend**, with **MongoDB/Mongoose** used for database operations.
 
----
 
 ## ✨ Features
 
@@ -71,7 +69,9 @@ The project uses a **React + Vite frontend** and a separate **Node.js + Express 
 - Request validation
 - Email/OTP-related backend dependencies
 
----
+## 🚀 Live Demo
+
+🔗 **Live Application:** https://food-delivery-1-709g.onrender.com
 
 # 🖥️ Application Preview
 
